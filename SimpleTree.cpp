@@ -5,18 +5,25 @@ public:
 	SimpleTree *leftChild;
 	SimpleTree *rightChild;
 
-	void breadthFirstSearch(SimpleTree subTree);
+	void breadthFirstSearch(SimpleTree &subTree);
 	void visit(SimpleTree node);
 	void buildRandomTree(char board[][3]);
 	int generateRandom();
 
 };
 
-void SimpleTree::breadthFirstSearch(SimpleTree subTree)
+void SimpleTree::breadthFirstSearch(SimpleTree &subTree)
 {
 	visit(subTree);
-	breadthFirstSearch(*subTree.leftChild);
-	breadthFirstSearch(*subTree.rightChild);	
+	if(subTree.leftChild != NULL)
+	{
+		breadthFirstSearch(*subTree.leftChild);
+	}
+	if(subTree.rightChild != NULL)
+	{
+		breadthFirstSearch(*subTree.rightChild);	
+	}
+	
 }
 
 void SimpleTree::visit(SimpleTree node)

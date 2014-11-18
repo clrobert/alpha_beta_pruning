@@ -3,8 +3,13 @@ class TicTacToe
 public:
 	char board[3][3];
 	int turns;
-	bool done = false;
+	bool done;
 
+	TicTacToe()
+	{
+		done = false;
+
+	}
 	void init()
 	{
 		turns = 0;

@@ -7,13 +7,45 @@
 #include "Player.cpp"
 #include "TicTacToe.cpp"
 
+using namespace std;
+
+
+class ReferenceType
+{
+public:
+	string one;
+	string two;
+	ReferenceType(string one, string two) : one(one), two(two) {}
+};
+
+void testRun(ReferenceType s);
+
 void calculateActualUtility(SimpleTree tree)
 {
-	
-	
+
+
 }
 
 int main()
+{
+
+	//playGame();
+
+	ReferenceType r("six", "five");
+
+	testRun(r);
+
+	return 0;
+}
+
+void testRun(ReferenceType s)
+{
+	cout << s.one;
+	cout << s.two;
+
+}
+
+void playGame()
 {
 
 	TicTacToe ttt;
@@ -36,6 +68,4 @@ int main()
 	}
 
 	std::cout << "Game finished.";
-
-	return 0;
 }
