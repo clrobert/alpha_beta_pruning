@@ -12,13 +12,14 @@ using namespace std;
 
 class ReferenceType
 {
-public:
 	string one;
 	string two;
+public:
+
 	ReferenceType(string one, string two) : one(one), two(two) {}
 };
 
-void testRun(ReferenceType s);
+void testRun(char s[]);
 
 void calculateActualUtility(SimpleTree tree)
 {
@@ -26,23 +27,18 @@ void calculateActualUtility(SimpleTree tree)
 
 }
 
+
 int main()
-{
+{	
+	TicTacToe t;
+	t.init();
+
+	SimpleTree s;
+	s.buildTicTacTree(t.getBoard());
 
 	//playGame();
 
-	ReferenceType r("six", "five");
-
-	testRun(r);
-
 	return 0;
-}
-
-void testRun(ReferenceType s)
-{
-	cout << s.one;
-	cout << s.two;
-
 }
 
 void playGame()

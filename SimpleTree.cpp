@@ -1,16 +1,38 @@
+using namespace std;
+
 class SimpleTree
 {
 public:
-	int item;
+	int value;
 	SimpleTree *leftChild;
 	SimpleTree *rightChild;
 
+	SimpleTree();
 	void breadthFirstSearch(SimpleTree &subTree);
 	void visit(SimpleTree node);
-	void buildRandomTree(char board[][3]);
+	void buildTicTacTree(char board[][3]);
 	int generateRandom();
+	void setValue(int rhs);
+	int getValue();
 
 };
+
+SimpleTree::SimpleTree()
+{
+	value = generateRandom();
+	leftChild = NULL;
+	rightChild = NULL;
+}
+
+void SimpleTree::setValue(int rhs)
+{
+	value = rhs;
+}
+
+int SimpleTree::getValue()
+{
+	return value;
+}
 
 void SimpleTree::breadthFirstSearch(SimpleTree &subTree)
 {
@@ -28,16 +50,15 @@ void SimpleTree::breadthFirstSearch(SimpleTree &subTree)
 
 void SimpleTree::visit(SimpleTree node)
 {
-	std::cout << node.item;
+	std::cout << node.value;
 }
 
-void SimpleTree::buildRandomTree(char board[][3])
+void SimpleTree::buildTicTacTree(char board[][3])
 {
 	SimpleTree root = SimpleTree();
-	root.item = generateRandom();
-	root.leftChild->item = generateRandom();
-	root.rightChild->item = generateRandom();
-
+	root.value = generateRandom();
+	root.leftChild->value = generateRandom();
+	root.rightChild->value = generateRandom();
 }
 
 int SimpleTree::generateRandom()
@@ -55,3 +76,13 @@ int SimpleTree::generateRandom()
 	
 	return dice_roll;
 }
+
+
+/*
+
+void SimpleTree::setLeftChild(SimpleTree& subTree)
+{
+	leftChild = &subTree;
+	cout << leftChild;
+}
+*/
