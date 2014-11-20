@@ -7,26 +7,25 @@ public:
 	SimpleTree *leftChild;
 	SimpleTree *rightChild;
 
-	SimpleTree();
-	void breadthFirstSearch(SimpleTree &subTree);
-	void visit(SimpleTree node);
-	void buildTicTacTree(char board[][3]);
+	SimpleTree(int height);
+
+	void printTree();
+	void preOrderPrint(SimpleTree *subTree);
+	void visit(SimpleTree *node);
+
 	int generateRandom();
-	void setValue(int rhs);
+
 	int getValue();
+
+	void buildTree(SimpleTree *tree, int height);
 
 };
 
-SimpleTree::SimpleTree()
+SimpleTree::SimpleTree(int height)
 {
 	value = generateRandom();
-	leftChild = NULL;
-	rightChild = NULL;
-}
-
-void SimpleTree::setValue(int rhs)
-{
-	value = rhs;
+	buildTree(leftChild, height);
+	buildTree(rightChild, height);
 }
 
 int SimpleTree::getValue()
@@ -34,31 +33,40 @@ int SimpleTree::getValue()
 	return value;
 }
 
-void SimpleTree::breadthFirstSearch(SimpleTree &subTree)
+void SimpleTree::printTree()
 {
-	visit(subTree);
-	if(subTree.leftChild != NULL)
+	std::cout << "Root:";
+	std::cout << value;
+	std::cout << "\n";
+
+	preOrderPrint(leftChild);
+	preOrderPrint(rightChild);
+}
+
+void SimpleTree::preOrderPrint(SimpleTree *subTree)
+{
+	if(subTree != nullptr)
 	{
-		breadthFirstSearch(*subTree.leftChild);
-	}
-	if(subTree.rightChild != NULL)
-	{
-		breadthFirstSearch(*subTree.rightChild);	
+		visit(subTree);
+
+		if(subTree->leftChild != nullptr)
+		{
+			preOrderPrint(subTree->leftChild);
+		}
+		if(subTree->rightChild != nullptr)
+		{
+			preOrderPrint(subTree->rightChild);	
+		}
+
 	}
 	
 }
 
-void SimpleTree::visit(SimpleTree node)
+void SimpleTree::visit(SimpleTree *node)
 {
-	std::cout << node.value;
-}
-
-void SimpleTree::buildTicTacTree(char board[][3])
-{
-	SimpleTree root = SimpleTree();
-	root.value = generateRandom();
-	root.leftChild->value = generateRandom();
-	root.rightChild->value = generateRandom();
+	std::cout << "Node:";
+	std::cout << node->value;
+	std::cout << "\n";
 }
 
 int SimpleTree::generateRandom()
@@ -77,12 +85,15 @@ int SimpleTree::generateRandom()
 	return dice_roll;
 }
 
-
-/*
-
-void SimpleTree::setLeftChild(SimpleTree& subTree)
+void SimpleTree::buildTree(SimpleTree *tree, int height)
 {
-	leftChild = &subTree;
-	cout << leftChild;
+	if(height > 0)
+	{
+		height = height - 1;
+		tree = new SimpleTree(height);
+	}
+	else
+	{
+		tree = nullptr;
+	}
 }
-*/

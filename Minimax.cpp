@@ -21,47 +21,56 @@ public:
 
 void testRun(char s[]);
 
-void calculateActualUtility(SimpleTree tree)
+
+void testOne()
 {
-
-
-}
-
-
-int main()
-{	
 	TicTacToe t;
 	t.init();
+	t.printBoard();
 
-	SimpleTree s;
-	s.buildTicTacTree(t.getBoard());
+	char** board2;
 
-	//playGame();
-
-	return 0;
+	board2 = t.getBoard();	
 }
+
+void testTwo()
+{
+	SimpleTree tree(5);
+	tree.printTree();
+}
+
 
 void playGame()
 {
 
-	TicTacToe ttt;
-	ttt.init();
-
-	Player player1('x');
-	Player player2('o');
-
-	while(ttt.isDone() == false && ttt.turns < 9)
-	{
-		ttt.turns = ttt.turns + 1;
-		player1.takeMove(ttt.board);
-		ttt.printBoard(ttt.board);
-		if(ttt.isDone() != false && ttt.turns < 9)
-		{
-			ttt.turns = ttt.turns + 1;
-			player2.takeMove(ttt.board);
-			ttt.printBoard(ttt.board);
-		}
-	}
-
+//	TicTacToe ttt;
+//	ttt.init();
+//
+//	Player player1('x');
+//	Player player2('o');
+//
+//	while(ttt.isDone() == false && ttt.turns < 9)
+//	{
+//		ttt.turns = ttt.turns + 1;
+//		player1.takeMove(ttt.board);
+//		ttt.printBoard(ttt.board);
+//		if(ttt.isDone() != false && ttt.turns < 9)
+//		{
+//			ttt.turns = ttt.turns + 1;
+//			player2.takeMove(ttt.board);
+//			ttt.printBoard(ttt.board);
+//		}
+//	}
+//
 	std::cout << "Game finished.";
+}
+
+int main()
+{	
+
+	//playGame();
+	//testOne();
+	testTwo();
+
+	return 0;
 }

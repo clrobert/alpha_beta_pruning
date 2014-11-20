@@ -1,22 +1,31 @@
+
 class Player
 {
 public:
-	void takeMove(char board[][3]);
+	char marker;
+	Player(char c);
+
+	int* getNextMove(char** board);
 	void minValue();
 	void maxValue();
 	void miniMaxDecision();
-	char marker;
-	Player(char c);
+	void calculateActualUtility(SimpleTree tree);
+
 };
 
 Player::Player(char c)
 {
 	marker = c;
+
 }
 
-void Player::takeMove(char board[][3])
+int* Player::getNextMove(char** board)
 {
+	int* coords = new int[2];
 
+
+
+	return coords;
 }
 
 void Player::maxValue()
@@ -33,3 +42,10 @@ void Player::miniMaxDecision()
 {
 
 }
+
+void Player::calculateActualUtility(SimpleTree tree)
+{
+
+
+}
+

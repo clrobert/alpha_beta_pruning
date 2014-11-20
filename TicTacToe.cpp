@@ -1,64 +1,85 @@
 class TicTacToe
 {
 public:
-	char board[3][3];
+	char** board;
 	int turns;
 	bool done;
 
 	TicTacToe();
 	void init();
 	bool isDone();
-	void printBoard(char board[][3]);
-	char[][] getBoard();
+	void markBoard(char marker, int* location);
+	void printBoard();
+	char** getBoard();
 
 };
 
 TicTacToe::TicTacToe()
+{
+	done = false;
+	turns = 0;
+	board = new char*[3];
+	for(int j = 0; j < 3; j++)
 	{
-		done = false;
-
+		board[j] = new char[3];
 	}
+}
 
 void TicTacToe::init()
+{
+	turns = 0;
+	for(int i = 0; i < 3; i++)
 	{
-		turns = 0;
-		for(int i = 0; i < 3; i++)
+		for(int j = 0; j < 3; j++)
 		{
-			for(int j = 0; j < 3; j++)
+			board[i][j] = '_';
+		}
+	}
+}
+
+void TicTacToe::markBoard(char marker, int* location)
+{
+	board[location[0]][location[1]] = marker;
+}
+
+bool TicTacToe::isDone()
+{
+	return this->done || turns > 8;
+}
+
+void TicTacToe::printBoard()
+{
+	for(int i = 0; i < 3; i++)
+	{
+		for(int j = 0; j < 3; j++)
+		{
+			std::cout << board[i][j];
+			if(j != 2)
 			{
-				board[i][j] = '_';
+				std::cout << '|';
 			}
 		}
-
+		std::cout << '\n';
+		
 	}
 
-	bool TicTacToe::isDone()
-	{
-		return this->done || turns > 8;
-	}
+	std::cout << '\n';
+	std::cout << '\n';
+}
 
-	void TicTacToe::printBoard(char board[][3])
+char** TicTacToe::getBoard()
+{
+	char** returnBoard = new char*[3];
+
+	for(int i = 0; i < 3; i++)
 	{
-		for(int i = 0; i < 3; i++)
+		returnBoard[i] = new char[3];
+
+		for(int j = 0; j < 3; j++)
 		{
-			for(int j = 0; j < 3; j++)
-			{
-				std::cout << board[i][j];
-				if(j != 2)
-				{
-					std::cout << '|';
-				}
-			}
-			std::cout << '\n';
-			
+			returnBoard[i][j] = board[i][j];
 		}
-
-		std::cout << '\n';
-		std::cout << '\n';
 	}
 
-	char[][] TicTacToe::getBoard()
-	{
-		return board;
-
-	}
+	return returnBoard;
+}
