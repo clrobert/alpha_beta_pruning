@@ -9,7 +9,7 @@ public:
 	void minValue();
 	void maxValue();
 	void miniMaxDecision();
-	void calculateActualUtility(SimpleTree tree);
+	//void calculateActualUtility(SimpleTree tree);
 
 };
 
@@ -43,9 +43,9 @@ void Player::miniMaxDecision()
 
 }
 
-void Player::calculateActualUtility(SimpleTree tree)
-{
-
-
-}
+//void Player::calculateActualUtility(SimpleTree tree)
+//{
+//
+//
+//}
 

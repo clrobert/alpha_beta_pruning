@@ -1,99 +1,118 @@
+#include <utility>
+#include "Move.cpp"
+
 using namespace std;
+
+
+const pair<int,int> loc1 (0,0);
+const pair<int,int> loc2 (0,1);
+const pair<int,int> loc3 (0,2);
+const pair<int,int> loc4 (1,0);
+const pair<int,int> loc5 (1,1);
+const pair<int,int> loc6 (1,2);
+const pair<int,int> loc7 (2,0);
+const pair<int,int> loc8 (2,1);
+const pair<int,int> loc9 (2,2);
+
 
 class SimpleTree
 {
 public:
-	int value;
-	SimpleTree *leftChild;
-	SimpleTree *rightChild;
+	Move *move;
 
-	SimpleTree(int height);
+	SimpleTree* child1;
+	SimpleTree* child2;
+	SimpleTree* child3;
+	SimpleTree* child4;
+	SimpleTree* child5;
+	SimpleTree* child6;
+	SimpleTree* child7;
+	SimpleTree* child8;
+	SimpleTree* child9;
 
-	void printTree();
-	void preOrderPrint(SimpleTree *subTree);
-	void visit(SimpleTree *node);
+	int height;
+
+	SimpleTree();
+	SimpleTree(Move move, int height);
+	
+	void preOrderPrint();
 
 	int generateRandom();
 
-	int getValue();
+	Move* getmove();
 
-	void buildTree(SimpleTree *tree, int height);
+	void buildTree(int height);
 
+	void buildTicTacTree();
+
+	void printLevel();
+
+	void printIfExists();
 };
 
-SimpleTree::SimpleTree(int height)
+SimpleTree::SimpleTree()
 {
-	value = generateRandom();
-	buildTree(leftChild, height);
-	buildTree(rightChild, height);
 }
 
-int SimpleTree::getValue()
+
+SimpleTree::SimpleTree(Move inVal, int height)
 {
-	return value;
+	move = &inVal;
+	height = height;
 }
 
-void SimpleTree::printTree()
+Move* SimpleTree::getmove()
 {
-	std::cout << "Root:";
-	std::cout << value;
-	std::cout << "\n";
-
-	preOrderPrint(leftChild);
-	preOrderPrint(rightChild);
+	return move;
 }
 
-void SimpleTree::preOrderPrint(SimpleTree *subTree)
+void SimpleTree::printLevel()
 {
-	if(subTree != nullptr)
-	{
-		visit(subTree);
+	//	std :: cout << "Node:";
+	//	std :: cout << move.utility;
+	//	std :: cout << "\n";
+//
+	child1->printIfExists();
+	child2->printIfExists();
+	child3->printIfExists();
+	child4->printIfExists();
+	child5->printIfExists();
+	child6->printIfExists();
+	child7->printIfExists();
+	child8->printIfExists();
+	child9->printIfExists();
 
-		if(subTree->leftChild != nullptr)
-		{
-			preOrderPrint(subTree->leftChild);
-		}
-		if(subTree->rightChild != nullptr)
-		{
-			preOrderPrint(subTree->rightChild);	
-		}
-
-	}
-	
+	//	if(leftChild != nullptr)
+	//	{
+	//		leftChild->preOrderPrint();
+	//	}
+	//	if(rightChild != nullptr)
+	//	{
+	//		rightChild->preOrderPrint();	
+	//	}
 }
 
-void SimpleTree::visit(SimpleTree *node)
+void SimpleTree::printIfExists()
 {
-	std::cout << "Node:";
-	std::cout << node->value;
-	std::cout << "\n";
+	move->toString();
 }
 
-int SimpleTree::generateRandom()
+void SimpleTree::buildTicTacTree()
 {
-	typedef std::chrono::high_resolution_clock myclock;
-  	myclock::time_point beginning = myclock::now();
+	child1 = new SimpleTree();
+	child1->move = new Move(loc1, 2, 'x');
 
-  	myclock::duration d = myclock::now() - beginning;
-  	unsigned seed2 = d.count();
+	child2 = new SimpleTree();
+	child2->move = new Move(loc2, 1, 'x');
 
-	std::default_random_engine generator;
-	generator.seed (seed2);
-	std::uniform_int_distribution<int> distribution(0,9);
-	int dice_roll = distribution(generator); 
-	
-	return dice_roll;
+	child3 = new SimpleTree();
+	child3->move = new Move(loc5, 0, 'x');
+
+
+	// utility = 0; marker = ''; } ;
+	//{ Move {};
+
+
+
 }
 
-void SimpleTree::buildTree(SimpleTree *tree, int height)
-{
-	if(height > 0)
-	{
-		height = height - 1;
-		tree = new SimpleTree(height);
-	}
-	else
-	{
-		tree = nullptr;
-	}
-}

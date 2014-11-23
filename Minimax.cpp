@@ -1,4 +1,4 @@
-#include <string>
+	#include <string>
 #include <iostream>
 #include <stdlib.h>
 #include <random>
@@ -19,6 +19,8 @@ public:
 	ReferenceType(string one, string two) : one(one), two(two) {}
 };
 
+typedef 
+
 void testRun(char s[]);
 
 
@@ -35,8 +37,14 @@ void testOne()
 
 void testTwo()
 {
-	SimpleTree tree(5);
-	tree.printTree();
+	SimpleTree tree;
+
+	tree.buildTicTacTree();
+
+	tree.printLevel();
+	//tree.buildTree(2);
+	//tree.preOrderPrint();
+	
 }
 
 
