@@ -7,7 +7,7 @@ public:
 
 	int* getNextMove(char** board);
 	void minValue();
-	void maxValue();
+	void maxValue(SimpleTree* tree);
 	void miniMaxDecision();
 	//void calculateActualUtility(SimpleTree tree);
 
@@ -28,7 +28,7 @@ int* Player::getNextMove(char** board)
 	return coords;
 }
 
-void Player::maxValue()
+void Player::maxValue(SimpleTree* tree)
 {
 
 }

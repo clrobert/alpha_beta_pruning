@@ -10,6 +10,8 @@ public:
 
 	Move(pair<int,int> location, int utility, char marker);
 	void toString();
+	pair<int,int> getLocation();
+	char getMarker();
 	
 };
 
@@ -19,6 +21,16 @@ Move::Move(pair<int,int> location, int utility, char marker)
 	loc = location;
 	util = utility;
 	mark = marker;
+}
+
+pair<int,int> Move::getLocation()
+{
+	return loc;
+}
+
+char Move::getMarker()
+{
+	return mark;
 }
 
 

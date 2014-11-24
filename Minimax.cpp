@@ -1,4 +1,4 @@
-	#include <string>
+#include <string>
 #include <iostream>
 #include <stdlib.h>
 #include <random>
@@ -37,13 +37,9 @@ void testOne()
 
 void testTwo()
 {
-	SimpleTree tree;
-
-	tree.buildTicTacTree();
-
-	tree.printLevel();
-	//tree.buildTree(2);
-	//tree.preOrderPrint();
+	SimpleTree tree(9);
+	tree.init();
+	tree.printChildren();
 	
 }
 

@@ -8,7 +8,7 @@ public:
 	TicTacToe();
 	void init();
 	bool isDone();
-	void markBoard(char marker, int* location);
+	void markBoard(Move* move);
 	void printBoard();
 	char** getBoard();
 
@@ -37,9 +37,11 @@ void TicTacToe::init()
 	}
 }
 
-void TicTacToe::markBoard(char marker, int* location)
+void TicTacToe::markBoard(Move* move)
 {
-	board[location[0]][location[1]] = marker;
+	pair<int,int> loc = move->getLocation();
+
+	board[loc.first][loc.second] = move->getMarker();
 }
 
 bool TicTacToe::isDone()
