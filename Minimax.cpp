@@ -6,6 +6,8 @@
 #include "SimpleTree.cpp"
 #include "Player.cpp"
 #include "TicTacToe.cpp"
+#include <stack>
+#include <sstream>
 
 using namespace std;
 
@@ -18,8 +20,7 @@ public:
 
 	ReferenceType(string one, string two) : one(one), two(two) {}
 };
-
-typedef 
+ 
 
 void testRun(char s[]);
 
@@ -69,12 +70,54 @@ void playGame()
 	std::cout << "Game finished.";
 }
 
+
+struct MyStruct
+{
+	char a,b;
+};
+/*
+void foo(int &arg1, int arg2, int* arg3)
+{
+	cout << arg3;
+	cout << '\n';
+	arg1 += 1234;
+	arg2 += 1234;
+	arg3 += 1234;
+
+	cout<< arg1;
+	cout << '\n';
+	cout << arg2;
+		cout << '\n';
+	cout << arg3;
+		cout << '\n';
+	cout << "done in fxn";
+}
+
+SimpleTree* Foo()
+{
+	SimpleTree t(1);
+	return &t;
+}
+*/
+
+
 int main()
 {	
+	//MyStruct f;
+	//f.a = 'a';
+	//f.b = 'z';
+//
+	//char *p = &f.a;
+	//p++;
+	//cout << *p;
 
-	//playGame();
-	//testOne();
-	testTwo();
+	//unsigned char* data;
+	//data = (unsigned char*)malloc(2);
+	//cout << data;
+	//This is because the data pointer is expecting to hold one character.
+
+
+	cout << '\n';
 
 	return 0;
 }
