@@ -38,10 +38,15 @@ void testOne()
 
 void testTwo()
 {
-	SimpleTree tree(9);
-	tree.init();
-	tree.printChildren();
-	
+	SimpleTree* tree  = new SimpleTree(9);
+	tree->init();
+	//tree->printChildren();
+
+	//SimpleTree* node;
+	//node = tree;
+
+	Player p('x');
+	cout << p.minimax(tree, 1, true);
 }
 
 
@@ -112,10 +117,11 @@ int main()
 	//cout << *p;
 
 	//unsigned char* data;
-	//data = (unsigned char*)malloc(2);
-	//cout << data;
+	//data = (unsigned char*)malloc(200);
+	//cout << sizeof(data);
 	//This is because the data pointer is expecting to hold one character.
 
+	testTwo();
 
 	cout << '\n';
 

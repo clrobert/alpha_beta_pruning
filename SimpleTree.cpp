@@ -21,11 +21,11 @@ const pair<int,int> locations[] = {loc1, loc2, loc3, loc4, loc5, loc6, loc7, loc
 class SimpleTree
 {
 public:
-	Move *move;
+	Move move;
 
 	vector<SimpleTree*> children;
 
-	int size;
+	int size; // number of children
 
 	int height;
 
@@ -35,21 +35,19 @@ public:
 
 	int generateRandom();
 
-	Move* getmove();
+	Move getMove();
 
 	void buildTree(Move* move);
 
-	void buildTicTacTree();
-
 	void print();
 	void printChildren();
-
+	int max(int a, int b);
+	int min(int a, int b);
 	void init();
 };
 
 SimpleTree::SimpleTree(int argSize)
 {
-	move = NULL;
 	size = argSize;
 
 	children.reserve(argSize);
@@ -63,19 +61,24 @@ SimpleTree::SimpleTree(int argSize)
 
 void SimpleTree::init()
 {
+	height = 1;
+	size = 9;
+
 	for(int i = 0; i < size; i++)
 	{
-		children[i] = new SimpleTree(0);
-		children[i]->buildTree(new Move(locations[i], 0, 'x'));
+		children[i] = new SimpleTree(0); // make nine new leaf nodes that have no children
+		children[i]->buildTree(new Move(locations[i], i, 'x')); // set them all up to reference the loc list
 	}
 }
 
 void SimpleTree::buildTree(Move* arg)
 {
-	move = arg;
+	move = *arg;
+	height = 0;
+	size = 0;
 }
 
-Move* SimpleTree::getmove()
+Move SimpleTree::getMove()
 {
 	return move;
 }
@@ -90,19 +93,39 @@ void SimpleTree::printChildren()
 
 void SimpleTree::print()
 {
-	move->toString();
+	move.toString();
 }
 
-void SimpleTree::buildTicTacTree()
+
+int SimpleTree::max(int a, int b)
 {
-	//child1 = new SimpleTree();
-	//child1->move = new Move(loc1, 2, 'x');
-//
-	//child2 = new SimpleTree();
-	//child2->move = new Move(loc2, 1, 'x');
-//
-	//child3 = new SimpleTree();
-	//child3->move = new Move(loc5, 0, 'x');
+	int max;
 
+	if(a > b)
+	{
+		max = a;
+	}
+	else
+	{
+		max = b;
+	}
+	return max;
 }
+
+int SimpleTree::min(int a, int b)
+{
+	int min;
+
+	if(a < b)
+	{
+		min = a;
+	}
+	else
+	{
+		min = b;
+	}
+	return min;
+}
+
+
 

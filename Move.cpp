@@ -8,12 +8,21 @@ public:
 	int util;
 	char mark;
 
+	Move();
 	Move(pair<int,int> location, int utility, char marker);
 	void toString();
 	pair<int,int> getLocation();
 	char getMarker();
+	int getUtility();
 	
 };
+
+
+Move::Move()
+{
+	initialized = false;
+	util = 0;
+}
 
 Move::Move(pair<int,int> location, int utility, char marker)
 {
@@ -31,6 +40,11 @@ pair<int,int> Move::getLocation()
 char Move::getMarker()
 {
 	return mark;
+}
+
+int Move::getUtility()
+{
+	return util;
 }
 
 
