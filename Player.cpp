@@ -6,14 +6,11 @@ class Player
 public:
 	char marker;
 	Player(char c);
+	SimpleTree* nextMove;
 
-	int* getNextMove(char** board);
-	//void minValue();
-	//void maxValue(SimpleTree* tree);
-	//void miniMaxDecision();
-	//void calculateActualUtility(SimpleTree tree);
+	Move* getNextMove(char** board);
 	int minimax(SimpleTree* node, int depth, bool maximizingPlayer);
-
+	SimpleTree* minimaxNode(SimpleTree* node, int depth, bool maximizingPlayer);
 };
 
 Player::Player(char c)
@@ -21,18 +18,12 @@ Player::Player(char c)
 	marker = c;
 
 }
-/*
-int* Player::getNextMove(char** board)
+
+// interprets the current state of the board as a tree and then runs mmab.
+Move* Player::getNextMove(char** board)
 {
-	int* coords = new int[2];
-
-
-
-	return coords;
+	return nullptr;
 }
-
-*/
-
 
 int Player::minimax(SimpleTree* node, int depth, bool maximizingPlayer)
 {
@@ -64,32 +55,34 @@ int Player::minimax(SimpleTree* node, int depth, bool maximizingPlayer)
 	
 }
 
-int Player::minimaxNode(SimpleTree* node, int depth, bool maximizingPlayer)
+SimpleTree* Player::minimaxNode(SimpleTree* node, int depth, bool maximizingPlayer)
 {
 
     if (depth == 0 || node->size == 0)
     {
-        return node->getMove().getUtility();
+        return node;
     }
     if (maximizingPlayer)
     {
-        int bestValue = -100;
+        SimpleTree* bestNode = new SimpleTree(0);
+        bestNode->buildFakeLow();
         for(int i = 0; i < node->size; i++)
         {
-            int val = minimax(node->children[i], depth - 1, false);
-            bestValue = max(bestValue, val);
+            SimpleTree* val = minimaxNode(node->children[i], depth - 1, false);
+            bestNode = SimpleTree::maxNode(bestNode, val);
         }
-        return bestValue;
+        return bestNode;
     }
     else
     {
-        int bestValue = 100;
+        SimpleTree* bestNode = new SimpleTree(0);
+        bestNode->buildFakeHigh();
         for(int i = 0; i < node->size; i++)
         {
-            int val = minimax(node->children[i], depth - 1, true);
-            bestValue = min(bestValue, val);
+            SimpleTree* val = minimaxNode(node->children[i], depth - 1, true);
+            bestNode = SimpleTree::minNode(bestNode, val);
         }
-        return bestValue;
+        return bestNode;
 	}
 	
 }
@@ -113,11 +106,3 @@ int Player::minimaxNode(SimpleTree* node, int depth, bool maximizingPlayer)
           return β
 (* Initial call *)
 */
-
-
-//void Player::calculateActualUtility(SimpleTree tree)
-//{
-//
-//
-//}
-

@@ -14,7 +14,8 @@ public:
 	pair<int,int> getLocation();
 	char getMarker();
 	int getUtility();
-	
+	void buildMove(pair<int,int> location, int utility, char marker);
+
 };
 
 
@@ -25,6 +26,14 @@ Move::Move()
 }
 
 Move::Move(pair<int,int> location, int utility, char marker)
+{
+	initialized = true;
+	loc = location;
+	util = utility;
+	mark = marker;
+}
+
+void Move::buildMove(pair<int,int> location, int utility, char marker)
 {
 	initialized = true;
 	loc = location;

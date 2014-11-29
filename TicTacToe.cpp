@@ -42,6 +42,8 @@ void TicTacToe::markBoard(Move* move)
 	pair<int,int> loc = move->getLocation();
 
 	board[loc.first][loc.second] = move->getMarker();
+
+	turns++;
 }
 
 bool TicTacToe::isDone()

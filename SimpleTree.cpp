@@ -5,6 +5,8 @@
 using namespace std;
 
 
+const pair<int,int> loc0 (-1,-1);
+
 const pair<int,int> loc1 (0,0);
 const pair<int,int> loc2 (0,1);
 const pair<int,int> loc3 (0,2);
@@ -39,9 +41,12 @@ public:
 
 	void print();
 	void printChildren();
-	int max(int a, int b);
-	int min(int a, int b);
+	static SimpleTree* maxNode(SimpleTree* a, SimpleTree* b);
+	static SimpleTree* minNode(SimpleTree* a, SimpleTree* b);
 	void init(int height);
+	void buildFakeLow();
+	void buildFakeHigh();
+	int getUtility();
 };
 
 SimpleTree::SimpleTree(int argSize)
@@ -85,6 +90,17 @@ void SimpleTree::buildTree(Move* arg)
 	move = *arg;
 }
 
+void SimpleTree::buildFakeLow()
+{
+	move.buildMove(loc0, -100, 'Y');
+}
+
+void SimpleTree::buildFakeHigh()
+{
+	move.buildMove(loc0, 100, 'Y');
+}
+
+
 Move SimpleTree::getMove()
 {
 	return move;
@@ -107,12 +123,16 @@ void SimpleTree::print()
 	move.toString();
 }
 
-
-int SimpleTree::max(int a, int b)
+int SimpleTree::getUtility()
 {
-	int max;
+	return move.getUtility();
+}
 
-	if(a > b)
+SimpleTree* SimpleTree::maxNode(SimpleTree* a, SimpleTree* b)
+{
+	SimpleTree* max;
+
+	if(a->getUtility() > b->getUtility())
 	{
 		max = a;
 	}
@@ -123,11 +143,11 @@ int SimpleTree::max(int a, int b)
 	return max;
 }
 
-int SimpleTree::min(int a, int b)
+SimpleTree* SimpleTree::minNode(SimpleTree* a, SimpleTree* b)
 {
-	int min;
+	SimpleTree* min;
 
-	if(a < b)
+	if(a->getUtility() < b->getUtility()	)
 	{
 		min = a;
 	}
