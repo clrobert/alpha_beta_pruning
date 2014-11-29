@@ -47,6 +47,7 @@ void testTwo()
 
 	Player p('x');
 	cout << p.minimax(tree, 1, true);
+	//cout << p.alphabeta(origin, depth, -∞, +∞, TRUE)
 }
 
 

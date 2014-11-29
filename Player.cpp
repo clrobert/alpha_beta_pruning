@@ -64,6 +64,37 @@ int Player::minimax(SimpleTree* node, int depth, bool maximizingPlayer)
 	
 }
 
+int Player::minimaxNode(SimpleTree* node, int depth, bool maximizingPlayer)
+{
+
+    if (depth == 0 || node->size == 0)
+    {
+        return node->getMove().getUtility();
+    }
+    if (maximizingPlayer)
+    {
+        int bestValue = -100;
+        for(int i = 0; i < node->size; i++)
+        {
+            int val = minimax(node->children[i], depth - 1, false);
+            bestValue = max(bestValue, val);
+        }
+        return bestValue;
+    }
+    else
+    {
+        int bestValue = 100;
+        for(int i = 0; i < node->size; i++)
+        {
+            int val = minimax(node->children[i], depth - 1, true);
+            bestValue = min(bestValue, val);
+        }
+        return bestValue;
+	}
+	
+}
+
+
 /*
  function alphabeta(node, depth, α, β, maximizingPlayer)
       if depth = 0 or node is a terminal node
