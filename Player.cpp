@@ -8,7 +8,7 @@ public:
 	Player(char c);
 	SimpleTree* nextMove;
 
-	Move* getNextMove(char** board);
+	//Move* getNextMove(char** board);
 	int minimax(SimpleTree* node, int depth, bool maximizingPlayer);
 	SimpleTree* minimaxNode(SimpleTree* node, int depth, bool maximizingPlayer);
 };
@@ -17,12 +17,6 @@ Player::Player(char c)
 {
 	marker = c;
 
-}
-
-// interprets the current state of the board as a tree and then runs mmab.
-Move* Player::getNextMove(char** board)
-{
-	return nullptr;
 }
 
 int Player::minimax(SimpleTree* node, int depth, bool maximizingPlayer)

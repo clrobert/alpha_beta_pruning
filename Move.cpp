@@ -18,7 +18,6 @@ public:
 
 };
 
-
 Move::Move()
 {
 	initialized = false;

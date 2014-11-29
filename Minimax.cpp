@@ -64,14 +64,14 @@ void playGame()
 
 	while(ttt.isDone() == false)
 	{
-		Move* p1move = player1.getNextMove(ttt.getBoard());
-		ttt.markBoard(p1move);
+		//Move* p1move = player1.getNextMove(ttt.getBoard());
+		//ttt.markBoard(p1move);
 		ttt.printBoard();
 
 		if(ttt.isDone() != false)
 		{
-			Move* p2move = player2.getNextMove(ttt.getBoard());
-			ttt.markBoard(p1move);			
+			//Move* p2move = player2.getNextMove(ttt.getBoard());
+			//ttt.markBoard(p1move);			
 			ttt.printBoard();
 		}
 	}
