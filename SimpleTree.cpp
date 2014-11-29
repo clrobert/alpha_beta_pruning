@@ -1,6 +1,7 @@
 #include <utility>
 #include "Move.cpp"
 #include <vector>
+#include <array>
 
 using namespace std;
 
@@ -19,7 +20,7 @@ const pair<int,int> loc9 (2,2);
 
 const pair<int,int> locations[] = {loc1, loc2, loc3, loc4, loc5, loc6, loc7, loc8, loc9};
 
-int locationsTaken[] = {0,0,0,0,0,0,0,0,0};
+int locationsTaken[] = {0,0,0,0,0,0,0,0,0}; // LocationsTaken. 
 
 class SimpleTree
 {
@@ -27,6 +28,7 @@ public:
 	Move move;
 
 	vector<SimpleTree*> children;
+	array<int,3> selected;
 
 	int size; // number of children
 
@@ -53,6 +55,10 @@ public:
 
 	Move getMove();
 
+	bool hasTwo(array<int,3> a);
+	array<int,3> getRows(int row);
+	array<int,3> getColumns(int column);
+	array<int,3> getDiagonals(int diagonal);
 
 	bool canWin(); 
 	bool canBlockRow();
@@ -75,7 +81,9 @@ public:
 SimpleTree::SimpleTree(int argSize)
 {
 	size = argSize;
-
+	selected[0] = 0;
+	selected[1] = 1;
+	selected[2] = 2;
 	children.reserve(argSize);
 
 	for(int i = 0; i < argSize; i++)
@@ -266,9 +274,87 @@ void SimpleTree::branchToDecision()
 
 }
 
+// Returns true if two of three of the locations are taken
+bool SimpleTree::hasTwo(array<int,3> a)
+{
+	return a[0] + a[1] + a[2] == 2;
+}
+
+array<int,3> SimpleTree::getRows(int row)
+{
+	if(row == 1)
+	{
+		selected[0] = locationsTaken[0];
+		selected[1] = locationsTaken[1];
+		selected[2] = locationsTaken[2];
+	}
+	else if (row == 2)
+	{
+		selected[0] = locationsTaken[3];
+		selected[1] = locationsTaken[4];
+		selected[2] = locationsTaken[5];
+	}
+	else if (row == 3)
+	{
+		selected[0] = locationsTaken[6];
+		selected[1] = locationsTaken[7];
+		selected[2] = locationsTaken[8];
+	}
+	return selected;
+}
+
+array<int,3> SimpleTree::getColumns(int column)
+{
+
+	if(column == 1)
+	{
+		selected[0] = locationsTaken[0];
+		selected[1] = locationsTaken[3];
+		selected[2] = locationsTaken[6];
+	}
+	else if (column == 2)
+	{
+		selected[0] = locationsTaken[1];
+		selected[1] = locationsTaken[4];
+		selected[2] = locationsTaken[7];
+	}
+	else if (column == 3)
+	{
+		selected[0] = locationsTaken[2];
+		selected[1] = locationsTaken[5];
+		selected[2] = locationsTaken[8];	}
+
+	return selected;
+}
+
+array<int,3> SimpleTree::getDiagonals(int diagonal)
+{
+
+	if(diagonal == 1)
+	{
+		selected[0] = locationsTaken[0];
+		selected[1] = locationsTaken[4];
+		selected[2] = locationsTaken[8];
+	}
+	else if (diagonal == 2)
+	{
+		selected[0] = locationsTaken[2];
+		selected[1] = locationsTaken[4];
+		selected[2] = locationsTaken[6];
+	}
+
+	return selected;
+}
+
 bool SimpleTree::canWin() //If the player has two in a row, they can place a third to get three in a row.
 {
-	return false;	
+	bool canWin = false;
+
+	canWin = hasTwo(getRows(1)) || hasTwo(getRows(2)) || hasTwo(getRows(3))  || 
+	hasTwo(getColumns(1)) || hasTwo(getColumns(2)) || hasTwo(getColumns(3)) ||
+	hasTwo(getDiagonals(1)) || hasTwo(getDiagonals(2));
+
+	return canWin;	
 }
 
 bool SimpleTree::canBlockRow() //If the opponent has two in a row, the player must play the third themselves to block the opponent.
