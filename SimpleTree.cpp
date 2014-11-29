@@ -19,6 +19,7 @@ const pair<int,int> loc9 (2,2);
 
 const pair<int,int> locations[] = {loc1, loc2, loc3, loc4, loc5, loc6, loc7, loc8, loc9};
 
+int locationsTaken[] = {0,0,0,0,0,0,0,0,0};
 
 class SimpleTree
 {
@@ -32,10 +33,9 @@ public:
 	SimpleTree(int children);
 	
 	void preOrderPrint();
-
 	int generateRandom();
 
-	Move getMove();
+	Move* getNextMove(SimpleTree* root);
 
 	void buildTree(Move* move);
 	int calculateUtility();
@@ -49,6 +49,27 @@ public:
 	int getUtility();
 	void initTicTacToe();
 	void initReversePyramid(int height);
+	void branchToDecision();
+
+	Move getMove();
+
+
+	bool canWin(); 
+	bool canBlockRow();
+	bool canFork(); 
+	bool canBlockFork();
+	bool canCenter(); 
+	bool canOppositeCorner() ;
+	bool canEmptyCorner() ;
+	bool canEmptySide();
+	Move* getWin();
+	Move* getBlockRow() ;
+	Move* getFork() ;
+	Move* getBlockFork();
+	Move* getCenter() ;
+	Move* getOppositeCorner() ;
+	Move* getEmptyCorner() ;
+	Move* getEmptySide();
 };
 
 SimpleTree::SimpleTree(int argSize)
@@ -86,11 +107,6 @@ void SimpleTree::init(int height)
 			children[i]->buildTree(new Move(locations[i], i * -5, 'o')); // set them all up to reference the loc list
 		}
 	}	
-}
-
-int SimpleTree::calculateUtility()
-{
-	return 0;
 }
 
 void SimpleTree::initTicTacToe()
@@ -193,50 +209,47 @@ SimpleTree* SimpleTree::minNode(SimpleTree* a, SimpleTree* b)
 	}
 	return min;
 }
-/*
+
 // interprets the current state of the board as a tree and then runs mmab.
 Move* SimpleTree::getNextMove(SimpleTree* root)
 {
 
-
-
-
 	return nullptr;
 }
 
-int SimpleTree::calculateUtility(int[] locationsTaken)
+int SimpleTree::calculateUtility()
 {
 	int value = 0;
 
-	if(canWin(locationsTaken))
+	if(canWin())
 	{
 		value = 8;
 	}
-	else if(canBlockRow(locationsTaken))
+	else if(canBlockRow())
 	{
 		value = 7;
 	}
-	else if(canFork(locationsTaken))
+	else if(canFork())
 	{
 		value = 6;
 	}
-	else if(canBlockFork(locationsTaken))
+	else if(canBlockFork())
 	{
 		value = 5;
 	}
-	else if(canCenter(locationsTaken))
+	else if(canCenter())
 	{
 		value = 4;
 	}
-	else if(canOppositeCorner(locationsTaken))
+	else if(canOppositeCorner())
 	{
 		value = 3;
 	}
-	else if(canEmptyCorner(locationsTaken))
+	else if(canEmptyCorner())
 	{
 		value = 2;
 	}
-	else if(canEmptySide(locationsTaken))
+	else if(canEmptySide())
 	{
 		value = 1;
 	}
@@ -244,10 +257,8 @@ int SimpleTree::calculateUtility(int[] locationsTaken)
 	{
 		// uh, is the game done? why are you here
 	}
+	return value;
 }
-
-
-
 
 // removes the child nodes that were not selected.
 void SimpleTree::branchToDecision()
@@ -255,17 +266,17 @@ void SimpleTree::branchToDecision()
 
 }
 
-bool canWin() //If the player has two in a row, they can place a third to get three in a row.
+bool SimpleTree::canWin() //If the player has two in a row, they can place a third to get three in a row.
 {
 	return false;	
 }
 
-bool canBlockRow() //If the opponent has two in a row, the player must play the third themselves to block the opponent.
+bool SimpleTree::canBlockRow() //If the opponent has two in a row, the player must play the third themselves to block the opponent.
 {
 	return false;	
 }
 
-bool canFork() //Create an opportunity where the player has two threats to win (two non-blocked lines of 2).
+bool SimpleTree::canFork() //Create an opportunity where the player has two threats to win (two non-blocked lines of 2).
 {
 	return false;	
 }
@@ -273,70 +284,69 @@ bool canFork() //Create an opportunity where the player has two threats to win (
 // canblock an opponent's fork:
 //The player should create two in a row to force the opponent into defending, as long as it doesn't result in them creating a fork. For example, if "X" has a corner, "O" has the center, and "X" has the opposite corner as well, "O" must not play a corner in order to win. (Playing a corner in this scenario creates a fork for "X" to win.)
 //If there is a configuration where the opponent can fork, the player should block that fork.
-bool canBlockFork()
+bool SimpleTree::canBlockFork()
 {
 	return false;		
 }
 
-bool canCenter() //A player marks the center. (If it is the first move of the game, playing on a corner gives "O" more opportunities to make a mistake and may therefore be the better choice; however, it makes no difference between perfect players.)
+bool SimpleTree::canCenter() //A player marks the center. (If it is the first move of the game, playing on a corner gives "O" more opportunities to make a mistake and may therefore be the better choice; however, it makes no difference between perfect players.)
 {
 	return false;		
 }
 
-bool canOppositeCorner() //If the opponent is in the corner, the player plays the opposite corner.
+bool SimpleTree::canOppositeCorner() //If the opponent is in the corner, the player plays the opposite corner.
 {
 	return false;		
 }
 
-bool canEmptyCorner() //The player plays in a corner square.
+bool SimpleTree::canEmptyCorner() //The player plays in a corner square.
 {
 	return false;		
 }
 
-bool canEmptySide() // The player plays in a middle square on any of the 4 sides.
+bool SimpleTree::canEmptySide() // The player plays in a middle square on any of the 4 sides.
 {
 	return false;		
 }
 
 // 
-Move* getWin()
+Move* SimpleTree::getWin()
 {
 	return nullptr;	
 }
 
-Move* canBlockRow() 
+Move* SimpleTree::getBlockRow() 
 {
 	return nullptr;
 }
 
-Move* getFork() 
+Move* SimpleTree::getFork() 
 {
 	return nullptr;
 }
 
-Move* canBlockFork()
+Move* SimpleTree::getBlockFork()
 {
 	return nullptr;
 }
 
-Move* getCenter() 
+Move* SimpleTree::getCenter() 
 {
 	return nullptr;
 }
 
-Move* getOppositeCorner() 
+Move* SimpleTree::getOppositeCorner() 
 {
 	return nullptr;
 }
 
-Move* getEmptyCorner() 
+Move* SimpleTree::getEmptyCorner() 
 {
 	return nullptr;
 }
 
-Move* getEmptySide()
+Move* SimpleTree::getEmptySide()
 {
 	return nullptr;
 }
 
-*/
