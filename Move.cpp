@@ -52,17 +52,17 @@ void Move::toString()
 {
 	if(initialized)
 	{
-		cout << "Location:";
+		cout << "  Location:";
 		cout << loc.first;
 		cout << ",";
 		cout << loc.second;
 		cout << '\n';
 	
-		cout << "Utility:";
+		cout << "  Utility:";
 		cout << util;
 		cout << '\n';
 	
-		cout << "Marker:";
+		cout << "  Marker:";
 		cout << mark;
 		cout << '\n';
 	}

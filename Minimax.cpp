@@ -39,8 +39,8 @@ void testOne()
 void testTwo()
 {
 	SimpleTree* tree  = new SimpleTree(9);
-	tree->init();
-	//tree->printChildren();
+	tree->init(1);
+	tree->printChildren();
 
 	//SimpleTree* node;
 	//node = tree;

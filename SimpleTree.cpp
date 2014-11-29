@@ -27,8 +27,6 @@ public:
 
 	int size; // number of children
 
-	int height;
-
 	SimpleTree(int children);
 	
 	void preOrderPrint();
@@ -43,7 +41,7 @@ public:
 	void printChildren();
 	int max(int a, int b);
 	int min(int a, int b);
-	void init();
+	void init(int height);
 };
 
 SimpleTree::SimpleTree(int argSize)
@@ -54,28 +52,37 @@ SimpleTree::SimpleTree(int argSize)
 
 	for(int i = 0; i < argSize; i++)
 	{
-		children[i] = NULL;
+		children[i] = new SimpleTree(0);
 	}
-
 }
 
-void SimpleTree::init()
+void SimpleTree::init(int height)
 {
-	height = 1;
-	size = 9;
 
-	for(int i = 0; i < size; i++)
+	if(height > 0)
 	{
-		children[i] = new SimpleTree(0); // make nine new leaf nodes that have no children
-		children[i]->buildTree(new Move(locations[i], i, 'x')); // set them all up to reference the loc list
+		for(int i = 0; i < size; i++)
+		{
+			children[i] = new SimpleTree(9); // make nine new leaf nodes that have no children
+			children[i]->buildTree(new Move(locations[i], i * 5, 'x')); // set them all up to reference the loc list
+			children[i]->init(height - 1);
+		}
+
 	}
+	else
+	{
+		for(int i = 0; i < size; i++)
+		{
+			children[i] = new SimpleTree(0); // make nine new leaf nodes that have no children
+			children[i]->buildTree(new Move(locations[i], i * -5, 'o')); // set them all up to reference the loc list
+		}
+	}	
 }
+
 
 void SimpleTree::buildTree(Move* arg)
 {
 	move = *arg;
-	height = 0;
-	size = 0;
 }
 
 Move SimpleTree::getMove()
@@ -87,7 +94,11 @@ void SimpleTree::printChildren()
 {
 	for(int i = 0; i < size; i++)
 		{
+			cout << "Root:\n";
 			children[i]->print();
+			cout << "Child: ";
+			cout << i << '\n';
+			children[i]->printChildren();			
 		}	
 }
 
