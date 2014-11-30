@@ -16,7 +16,6 @@ public:
 Player::Player(char c)
 {
 	marker = c;
-
 }
 
 int Player::minimax(SimpleTree* node, int depth, bool maximizingPlayer)
