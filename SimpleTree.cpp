@@ -7,7 +7,6 @@ using namespace std;
 
 
 const pair<int,int> loc0 (-1,-1);
-
 const pair<int,int> loc1 (0,0);
 const pair<int,int> loc2 (0,1);
 const pair<int,int> loc3 (0,2);
@@ -29,6 +28,8 @@ public:
 
 	vector<SimpleTree*> children;
 	array<char,3> selected;
+
+	char currentMarker;
 
 	int size; // number of children
 
@@ -91,11 +92,8 @@ SimpleTree::SimpleTree(int argSize)
 	}
 }
 
-
-
 void SimpleTree::init(int height)
 {
-
 	if(height > 0)
 	{
 		for(int i = 0; i < size; i++)
@@ -143,7 +141,6 @@ void SimpleTree::initReversePyramid(int height)
 	}	
 }
 
-
 void SimpleTree::buildTree(Move* arg)
 {
 	move = *arg;
@@ -158,7 +155,6 @@ void SimpleTree::buildFakeHigh()
 {
 	move.buildMove(loc0, 100, 'Y');
 }
-
 
 Move SimpleTree::getMove()
 {
@@ -224,18 +220,21 @@ Move* SimpleTree::getNextMove(SimpleTree* root)
 	return nullptr;
 }
 
-int SimpleTree::calculateUtility(char currentMarker)
+/*
+	Calculates the current decision utility value of a given square and 
+	player marker.
+	This uses the current state of the board.
+*/
+int SimpleTree::calculateCurrentUtility(char cm, int location)
 {
 	int value = 0;
+	currentMarker = cm;
 
-	char possibleWin = canWin();
-
-
-	if(possibleWin != ' '  && possibleWin == currentMarker)  // can win
+	if(canWin())  // can win
 	{
 		value = 8;
 	}
-	else if(possibleWin != ' '  && possibleWin != currentMarker) // can block
+	else if(canBlock()) // can block
 	{
 		value = 7;
 	}
@@ -277,27 +276,43 @@ void SimpleTree::branchToDecision()
 }
 
 // Returns the marker if two of three of the locations are taken
-char SimpleTree::hasTwo(array<char,3> a)
+bool SimpleTree::hasTwo(array<char,3> a)
 {
-	//return a[0] + a[1] + a[2] == 2;
-	return ' ';
+	int count = 0;
+
+	if(a[0] == currentMarker)
+	{
+		count++;
+	}
+
+	if(a[1] == currentMarker)
+	{
+		count++;
+	}
+
+	if(a[2] == currentMarker)
+	{
+		count++;
+	}
+
+	return count == 2;
 }
 
-array<char,3> SimpleTree::getRows(int row)
+array<char,3> SimpleTree::getRow(int location)
 {
-	if(row == 1)
+	if(location < 3)
 	{
 		selected[0] = gameState[0];
 		selected[1] = gameState[1];
 		selected[2] = gameState[2];
 	}
-	else if (row == 2)
+	else if (location >= 3 && location < 6)
 	{
 		selected[0] = gameState[3];
 		selected[1] = gameState[4];
 		selected[2] = gameState[5];
 	}
-	else if (row == 3)
+	else if (location >= 6)
 	{
 		selected[0] = gameState[6];
 		selected[1] = gameState[7];
@@ -306,22 +321,23 @@ array<char,3> SimpleTree::getRows(int row)
 	return selected;
 }
 
-array<char,3> SimpleTree::getColumns(int column)
+array<char,3> SimpleTree::getColumn(int location)
 {
 
-	if(column == 1)
+	int column = location 	
+	if(column % 3 == 0)
 	{
 		selected[0] = gameState[0];
 		selected[1] = gameState[3];
 		selected[2] = gameState[6];
 	}
-	else if (column == 2)
+	else if (column % 3 == 1)
 	{
 		selected[0] = gameState[1];
 		selected[1] = gameState[4];
 		selected[2] = gameState[7];
 	}
-	else if (column == 3)
+	else if (column % 3 == 2)
 	{
 		selected[0] = gameState[2];
 		selected[1] = gameState[5];
@@ -331,16 +347,22 @@ array<char,3> SimpleTree::getColumns(int column)
 	return selected;
 }
 
-array<char,3> SimpleTree::getDiagonals(int diagonal)
+array<char,3> SimpleTree::getIfInLeftDiagonal(int location)
 {
 
-	if(diagonal == 1)
+	if(location % 4 == 0)
 	{
 		selected[0] = gameState[0];
 		selected[1] = gameState[4];
 		selected[2] = gameState[8];
 	}
-	else if (diagonal == 2)
+
+	return selected;
+}
+
+array<char,3> SimpleTree::getIfInRightDiagonal(int location)
+{
+	if (location == 2 || location == 4 || location == 6)
 	{
 		selected[0] = gameState[2];
 		selected[1] = gameState[4];
@@ -354,36 +376,75 @@ array<char,3> SimpleTree::getDiagonals(int diagonal)
 
 // If the player has two in a row, they can place a third to get three in a row.
 // Returns the possible winner if there is a winner.
-char SimpleTree::canWin() 
+char SimpleTree::canWin(int location) 
 {
-	char canWin = ' ';
+	bool canWin = false;
 
-	int iterator = 1;
+	canWin = hasTwo(getRow(location));
 
-	while(canWin == ' ' && iterator > 4)
+	if(!canWin)
 	{
-		canWin = hasTwo(getRows(iterator));
-		iterator++;
+		canWin = hasTwo(getColumn(location));
 	}
 
-	while(canWin == ' ' && iterator > 4)
+	if(!canWin)
 	{
-		canWin = hasTwo(getColumns(iterator));
-		iterator++;
+		canWin = hasTwo(getIfInLeftDiagonal(location));
 	}
 
-	while(canWin == ' ' && iterator < 3)
+	if(!canWin)
 	{
-		canWin = hasTwo(getDiagonals(iterator));
-		iterator++;
+		canWin = hasTwo(getIfInRightDiagonal(location));
 	}
+
+	// set selected to default state.
 
 	return canWin;	
 }
 
+/*
+Doesn't care if the current marker is uninitialized.
+*/
+void SimpleTree::flipCurrentMarker()
+{
+	if(currentMarker == 'X')
+	{
+		currentMarker = 'O';
+	}
+	else
+	{
+		currentMarker = 'X';
+	}
+}
+
+bool SimpleTree::canBlock(int location) 
+{
+	bool canBlock = false;
+
+	flipCurrentMarker();
+
+	canBlock = canWin(location);
+
+	flipCurrentMarker();
+
+	return canBlock;	
+}
+
+
 bool SimpleTree::canFork() //Create an opportunity where the player has two threats to win (two non-blocked lines of 2).
 {
-	return false;	
+	bool forkable = false;
+
+	if(isMine(0) && isMine(8) && (isEmptyCorner(2) || isEmptyCorner(6)) )
+	{
+		forkable = true;
+	}
+	else if (isMine(2) && isMine(6) && (isEmptyCorner(0) || isEmptyCorner(8)) )
+	{
+		forkable = true;
+	}
+
+	return forkable;	
 }
 
 // canblock an opponent's fork:
@@ -391,27 +452,98 @@ bool SimpleTree::canFork() //Create an opportunity where the player has two thre
 //If there is a configuration where the opponent can fork, the player should block that fork.
 bool SimpleTree::canBlockFork()
 {
-	return false;		
+	bool canBlockFork = false;
+
+	flipCurrentMarker();
+	canBlockFork = canFork();
+	flipCurrentMarker();
+
+	return canBlockFork;		
 }
 
-bool SimpleTree::canCenter() //A player marks the center. (If it is the first move of the game, playing on a corner gives "O" more opportunities to make a mistake and may therefore be the better choice; however, it makes no difference between perfect players.)
+/*
+A player marks the center. (If it is the first move of the game, 
+playing on a corner gives "O" more opportunities to make a mistake 
+and may therefore be the better choice; however, it makes no difference between perfect players.)
+*/
+bool SimpleTree::canCenter() 
 {
-	return false;		
+	return isEmpty(gameState[4]);		
 }
 
-bool SimpleTree::canOppositeCorner() //If the opponent is in the corner, the player plays the opposite corner.
+ //If the opponent is in the corner, the player plays the opposite corner.
+bool SimpleTree::canOppositeCorner(location)
 {
-	return false;		
+	bool canCorner = false;
+
+	if(location == 0 && isEmpty(gameState[8]))
+	{
+		canCorner = true;
+	}
+	else if(location == 2 && isEmpty(gameState[6]))
+	{
+		canCorner = true;
+	}
+	else if(location == 6 && isEmpty(gameState[2]))
+	{
+		canCorner = true;
+	}
+	else if(location == 8 && isEmpty(gameState[0]))
+	{
+		canCorner = true;
+	}
+
+	return canCorner;		
+}
+
+// Silly naming for if the marker at the location matches the given marker
+bool SimpleTree::isMine(char location)
+{
+	return currentMarker == gameState[location];
 }
 
 bool SimpleTree::canEmptyCorner() //The player plays in a corner square.
 {
-	return false;		
+	return isEmpty(gameState[0]) || isEmpty(gameState[2]) || isEmpty(gameState[6]) || isEmpty(gameState[8]);			
 }
 
-bool SimpleTree::canEmptySide() // The player plays in a middle square on any of the 4 sides.
+bool SimpleTree::canEmptySide() // The player can play in a middle square on any of the 4 sides.
 {
-	return false;		
+	return isEmpty(gameState[1]) || isEmpty(gameState[3]) || isEmpty(gameState[5]) || isEmpty(gameState[7]);		
+}
+
+bool SimpleTree::isEmptyCorner(location)
+{
+	bool isCornerable;
+
+	if(location == 0)
+	{
+		isCornerable = isEmpty(0) && isEmpty(1) && isEmpty(3);
+	}
+	if(location == 2)
+	{
+		isCornerable = isEmpty(1) && isEmpty(2) && isEmpty(5);
+	}
+	else if (location == 6)
+	{
+		isCornerable = isEmpty(3) && isEmpty(6) && isEmpty(7);
+	}
+	else if (location == 8)
+	{
+		isCornerable = isEmpty(5) && isEmpty(7) && isEmpty(8);
+	}
+
+	return isCornerable;
+}
+
+bool SimpleTree::isEmpty(char checkMe)
+{
+	return checkMe == ' ';
+}
+
+bool SimpleTree::isEmpty(int location)
+{
+	return gameState[location] == ' ';
 }
 
 Move* SimpleTree::getBlockRow() 
@@ -425,11 +557,6 @@ Move* SimpleTree::getFork()
 }
 
 Move* SimpleTree::getBlockFork()
-{
-	return nullptr;
-}
-
-Move* SimpleTree::getCenter() 
 {
 	return nullptr;
 }
