@@ -17,7 +17,6 @@ class ReferenceType
 	string one;
 	string two;
 public:
-
 	ReferenceType(string one, string two) : one(one), two(two) {}
 };
  
@@ -47,7 +46,7 @@ void testTwo()
 
 	Player p('x');
 	SimpleTree* choice = p.minimaxNode(tree, 1, true);
-	choice->print();
+	//choice->print();
 
 	//cout << p.alphabeta(origin, depth, -∞, +∞, TRUE)
 }
@@ -81,7 +80,9 @@ void playGame()
 
 
 int main()
-{	
-	playGame();
+{
+
+
+//	playGame();
 	return 0;
 }

@@ -35,15 +35,15 @@ public:
 
 	SimpleTree(int children);
 	
-	void preOrderPrint();
+	void preOrdertoString();
 	int generateRandom();
 
 	Move* getNextMove(SimpleTree* root);
 
 	void buildTree(Move* move);
-	int calculateUtility(char marker);
-	void print();
-	void printChildren();
+	int calculateCurrentUtility(char marker, int location);
+	void toString();
+	void toStringChildren();
 	static SimpleTree* maxNode(SimpleTree* a, SimpleTree* b);
 	static SimpleTree* minNode(SimpleTree* a, SimpleTree* b);
 	void init(int height);
@@ -56,26 +56,24 @@ public:
 
 	Move getMove();
 
-	char hasTwo(array<char,3> a);
-	array<char,3> getRows(int row);
-	array<char,3> getColumns(int column);
-	array<char,3> getDiagonals(int diagonal);
+	bool hasTwo(array<char,3> a);
+	array<char,3> getRow(int row);
+	array<char,3> getColumn(int column);
+	array<char,3> getIfInLeftDiagonal(int diagonal);
+	array<char,3> getIfInRightDiagonal(int diagonal);
 
-	char canWin(); 
-	bool canFork(); 
-	bool canBlockFork();
-	bool canCenter(); 
-	bool canOppositeCorner() ;
-	bool canEmptyCorner() ;
-	bool canEmptySide();
-	Move* getWin();
-	Move* getBlockRow() ;
-	Move* getFork() ;
-	Move* getBlockFork();
-	Move* getCenter() ;
-	Move* getOppositeCorner() ;
-	Move* getEmptyCorner() ;
-	Move* getEmptySide();
+	void flipCurrentMarker();
+	bool isMine(char marker);
+	bool isEmpty(int location);
+	bool isEmpty(char checkMe);
+
+	char isWin(int location); 
+	bool isBlock(int location);
+	bool isFork(int location); 
+	bool isBlockFork(int location);
+	bool isOppositeCorner(int location);
+	bool isEmptyCorner(int location);
+	bool isEmptySide(int location);
 };
 
 SimpleTree::SimpleTree(int argSize)
@@ -114,11 +112,17 @@ void SimpleTree::init(int height)
 	}	
 }
 
+/*
+	The inital call to fake data.
+*/
 void SimpleTree::initTicTacToe()
 {
 	initReversePyramid(9);
 }
 
+/*
+	Attempting to create fake data.
+*/
 void SimpleTree::initReversePyramid(int height)
 {
 	if(height > 0)
@@ -141,48 +145,73 @@ void SimpleTree::initReversePyramid(int height)
 	}	
 }
 
+/*
+	Interestingly designed factory method.
+*/
 void SimpleTree::buildTree(Move* arg)
 {
 	move = *arg;
 }
 
+/*
+	@ensure: Creates a default low priority move to compare to in the 
+	minimax function for the opposing player's decision.
+*/
 void SimpleTree::buildFakeLow()
 {
 	move.buildMove(loc0, -100, 'Y');
 }
 
+/*
+	@ensure: Creates a default high priority move to compare to in the 
+	minimax function for the current player's decision.
+*/
 void SimpleTree::buildFakeHigh()
 {
 	move.buildMove(loc0, 100, 'Y');
 }
 
+/*
+	@ensure: Return the generated next best move.
+	@ensure: Returns a default value if the utility function has not been run.
+	@stub
+*/
 Move SimpleTree::getMove()
 {
 	return move;
 }
 
-void SimpleTree::printChildren()
+/*
+	@ensure: toStrings the root node and then all
+	of the contained children which are initialized.
+*/
+void SimpleTree::toStringChildren()
 {
 	for(int i = 0; i < size; i++)
 		{
 			cout << "Root:\n";
-			children[i]->print();
+			children[i]->toString();
 			cout << "Child: ";
 			cout << i << '\n';
-			children[i]->printChildren();			
+			children[i]->toStringChildren();			
 		}	
 }
 
-void SimpleTree::print()
+void SimpleTree::toString()
 {
-	move.toString();
+	return move.toString();
 }
 
+// Accessor
 int SimpleTree::getUtility()
 {
 	return move.getUtility();
 }
 
+/*
+	@ensure: Runs a simple max function on the integer value
+	of two given nodes.
+*/
 SimpleTree* SimpleTree::maxNode(SimpleTree* a, SimpleTree* b)
 {
 	SimpleTree* max;
@@ -198,6 +227,10 @@ SimpleTree* SimpleTree::maxNode(SimpleTree* a, SimpleTree* b)
 	return max;
 }
 
+/*
+	@ensure: Runs a simple min function on the integer value
+	of two given nodes.
+*/
 SimpleTree* SimpleTree::minNode(SimpleTree* a, SimpleTree* b)
 {
 	SimpleTree* min;
@@ -213,7 +246,10 @@ SimpleTree* SimpleTree::minNode(SimpleTree* a, SimpleTree* b)
 	return min;
 }
 
-// interprets the current state of the board as a tree and then runs mmab.
+/*
+	@requre: interprets the current state of the board as a tree 
+	@ensure: runs mmab.
+ */
 Move* SimpleTree::getNextMove(SimpleTree* root)
 {
 
@@ -221,44 +257,44 @@ Move* SimpleTree::getNextMove(SimpleTree* root)
 }
 
 /*
-	Calculates the current decision utility value of a given square and 
+	@require: This uses the current state of the board.
+	@ensure: Calculates the current decision utility value of a given square and 
 	player marker.
-	This uses the current state of the board.
 */
 int SimpleTree::calculateCurrentUtility(char cm, int location)
 {
 	int value = 0;
 	currentMarker = cm;
 
-	if(canWin())  // can win
+	if(isWin(location))  
 	{
 		value = 8;
 	}
-	else if(canBlock()) // can block
+	else if(isBlock(location))
 	{
 		value = 7;
 	}
-	else if(canFork())
+	else if(isFork(location))
 	{
 		value = 6;
 	}
-	else if(canBlockFork())
+	else if(isBlockFork(location))
 	{
 		value = 5;
 	}
-	else if(canCenter())
+	else if(location == 4) // center
 	{
 		value = 4;
 	}
-	else if(canOppositeCorner())
+	else if(isOppositeCorner(location))
 	{
 		value = 3;
 	}
-	else if(canEmptyCorner())
+	else if(isEmptyCorner(location))
 	{
 		value = 2;
 	}
-	else if(canEmptySide())
+	else if(isEmptySide(location))
 	{
 		value = 1;
 	}
@@ -269,13 +305,20 @@ int SimpleTree::calculateCurrentUtility(char cm, int location)
 	return value;
 }
 
-// removes the child nodes that were not selected.
+/*
+ 	@ensure: Removes the child nodes that were not selected
+ 	from the currently visited node.
+ 	@stub
+ */
 void SimpleTree::branchToDecision()
 {
 
 }
 
-// Returns the marker if two of three of the locations are taken
+/*
+	@ensure: Returns true if two of the three given locations
+	are taken by the currently selected marker.
+*/
 bool SimpleTree::hasTwo(array<char,3> a)
 {
 	int count = 0;
@@ -298,6 +341,9 @@ bool SimpleTree::hasTwo(array<char,3> a)
 	return count == 2;
 }
 
+/*
+	@ensure: returns the entire row of the selected location.
+*/
 array<char,3> SimpleTree::getRow(int location)
 {
 	if(location < 3)
@@ -321,10 +367,14 @@ array<char,3> SimpleTree::getRow(int location)
 	return selected;
 }
 
+/*
+	@ensure: returns the entire column of the selected location.
+*/
 array<char,3> SimpleTree::getColumn(int location)
 {
 
-	int column = location 	
+	int column = location; 	
+
 	if(column % 3 == 0)
 	{
 		selected[0] = gameState[0];
@@ -347,6 +397,9 @@ array<char,3> SimpleTree::getColumn(int location)
 	return selected;
 }
 
+/*
+	@ensure: Returns true if the given location is inside the left diagonal.
+*/
 array<char,3> SimpleTree::getIfInLeftDiagonal(int location)
 {
 
@@ -360,6 +413,9 @@ array<char,3> SimpleTree::getIfInLeftDiagonal(int location)
 	return selected;
 }
 
+/*
+	@ensure: Returns true if the given location is inside the right diagonal.
+*/
 array<char,3> SimpleTree::getIfInRightDiagonal(int location)
 {
 	if (location == 2 || location == 4 || location == 6)
@@ -374,36 +430,37 @@ array<char,3> SimpleTree::getIfInRightDiagonal(int location)
 
 //void SimpleTree::setGameState(char gamestate[]); // 
 
-// If the player has two in a row, they can place a third to get three in a row.
-// Returns the possible winner if there is a winner.
-char SimpleTree::canWin(int location) 
+/*
+	@ensure: returns true if the given location is a winning move.
+*/
+char SimpleTree::isWin(int location) 
 {
-	bool canWin = false;
+	bool isWin = false;
 
-	canWin = hasTwo(getRow(location));
+	isWin = hasTwo(getRow(location));
 
-	if(!canWin)
+	if(!isWin)
 	{
-		canWin = hasTwo(getColumn(location));
+		isWin = hasTwo(getColumn(location));
 	}
 
-	if(!canWin)
+	if(!isWin)
 	{
-		canWin = hasTwo(getIfInLeftDiagonal(location));
+		isWin = hasTwo(getIfInLeftDiagonal(location));
 	}
 
-	if(!canWin)
+	if(!isWin)
 	{
-		canWin = hasTwo(getIfInRightDiagonal(location));
+		isWin = hasTwo(getIfInRightDiagonal(location));
 	}
 
 	// set selected to default state.
-
-	return canWin;	
+	return isWin;	
 }
 
 /*
-Doesn't care if the current marker is uninitialized.
+	@require: Doesn't care if the current marker is uninitialized.
+	@ensure: Flips the currently selected marker.
 */
 void SimpleTree::flipCurrentMarker()
 {
@@ -417,25 +474,31 @@ void SimpleTree::flipCurrentMarker()
 	}
 }
 
-bool SimpleTree::canBlock(int location) 
+/*
+	@ensure: Returns true if the passed location is a location
+	that will block something.
+*/
+bool SimpleTree::isBlock(int location) 
 {
-	bool canBlock = false;
+	bool isBlock = false;
 
 	flipCurrentMarker();
 
-	canBlock = canWin(location);
+	isBlock = isWin(location);
 
 	flipCurrentMarker();
 
-	return canBlock;	
+	return isBlock;	
 }
 
-
-bool SimpleTree::canFork() //Create an opportunity where the player has two threats to win (two non-blocked lines of 2).
-{
+/*
+	@ensure: Returns true if the location is the location of a possible fork.
+*/
+bool SimpleTree::isFork(int location)
+ {
 	bool forkable = false;
 
-	if(isMine(0) && isMine(8) && (isEmptyCorner(2) || isEmptyCorner(6)) )
+	if(location == 2 || location == 6 && isMine(0) && isMine(8) && (isEmptyCorner(2) || isEmptyCorner(6)) )
 	{
 		forkable = true;
 	}
@@ -444,75 +507,72 @@ bool SimpleTree::canFork() //Create an opportunity where the player has two thre
 		forkable = true;
 	}
 
+	// add forks from corners to center
+
 	return forkable;	
 }
 
-// canblock an opponent's fork:
-//The player should create two in a row to force the opponent into defending, as long as it doesn't result in them creating a fork. For example, if "X" has a corner, "O" has the center, and "X" has the opposite corner as well, "O" must not play a corner in order to win. (Playing a corner in this scenario creates a fork for "X" to win.)
-//If there is a configuration where the opponent can fork, the player should block that fork.
-bool SimpleTree::canBlockFork()
+/*
+	@ensure: Returns true if the location is a square that can block a fork.
+*/
+bool SimpleTree::isBlockFork(int location)
 {
-	bool canBlockFork = false;
+	bool isBlockFork = false;
 
 	flipCurrentMarker();
-	canBlockFork = canFork();
+	isBlockFork = isFork(location);
 	flipCurrentMarker();
 
-	return canBlockFork;		
+	return isBlockFork;		
 }
 
 /*
-A player marks the center. (If it is the first move of the game, 
-playing on a corner gives "O" more opportunities to make a mistake 
-and may therefore be the better choice; however, it makes no difference between perfect players.)
+	@ensure: Returns true if ??
 */
-bool SimpleTree::canCenter() 
+bool SimpleTree::isOppositeCorner(int location)
 {
-	return isEmpty(gameState[4]);		
-}
-
- //If the opponent is in the corner, the player plays the opposite corner.
-bool SimpleTree::canOppositeCorner(location)
-{
-	bool canCorner = false;
+	bool isCorner = false;
 
 	if(location == 0 && isEmpty(gameState[8]))
 	{
-		canCorner = true;
+		isCorner = true;
 	}
 	else if(location == 2 && isEmpty(gameState[6]))
 	{
-		canCorner = true;
+		isCorner = true;
 	}
 	else if(location == 6 && isEmpty(gameState[2]))
 	{
-		canCorner = true;
+		isCorner = true;
 	}
 	else if(location == 8 && isEmpty(gameState[0]))
 	{
-		canCorner = true;
+		isCorner = true;
 	}
 
-	return canCorner;		
+	return isCorner;		
 }
 
-// Silly naming for if the marker at the location matches the given marker
+/*
+	@ensure: Returns true if the location has the same marker as the passed marker.
+*/
 bool SimpleTree::isMine(char location)
 {
 	return currentMarker == gameState[location];
 }
 
-bool SimpleTree::canEmptyCorner() //The player plays in a corner square.
+/*
+	@ensure: Returns true if the passed location is an empty side.
+*/
+bool SimpleTree::isEmptySide(int location) 
 {
-	return isEmpty(gameState[0]) || isEmpty(gameState[2]) || isEmpty(gameState[6]) || isEmpty(gameState[8]);			
+	return isEmpty(gameState[location]) && (location == 1 || location == 3 || location == 5 || location == 7);		
 }
 
-bool SimpleTree::canEmptySide() // The player can play in a middle square on any of the 4 sides.
-{
-	return isEmpty(gameState[1]) || isEmpty(gameState[3]) || isEmpty(gameState[5]) || isEmpty(gameState[7]);		
-}
-
-bool SimpleTree::isEmptyCorner(location)
+/*
+	@ensure: Returns true if the passed location is an empty corner.
+*/
+bool SimpleTree::isEmptyCorner(int location)
 {
 	bool isCornerable;
 
@@ -536,43 +596,18 @@ bool SimpleTree::isEmptyCorner(location)
 	return isCornerable;
 }
 
+/*
+	@ensure: Returns true if the passed marker is empty
+*/
 bool SimpleTree::isEmpty(char checkMe)
 {
 	return checkMe == ' ';
 }
 
+/*
+	@ensure: Returns true if the passed location is empty
+*/
 bool SimpleTree::isEmpty(int location)
 {
-	return gameState[location] == ' ';
+	return isEmpty(gameState[location]);
 }
-
-Move* SimpleTree::getBlockRow() 
-{
-	return nullptr;
-}
-
-Move* SimpleTree::getFork() 
-{
-	return nullptr;
-}
-
-Move* SimpleTree::getBlockFork()
-{
-	return nullptr;
-}
-
-Move* SimpleTree::getOppositeCorner() 
-{
-	return nullptr;
-}
-
-Move* SimpleTree::getEmptyCorner() 
-{
-	return nullptr;
-}
-
-Move* SimpleTree::getEmptySide()
-{
-	return nullptr;
-}
-
