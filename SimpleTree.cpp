@@ -2,6 +2,7 @@
 #include "Move.cpp"
 #include <vector>
 #include <array>
+#include <queue>
 
 using namespace std;
 
@@ -17,8 +18,14 @@ const pair<int,int> loc7 (2,0);
 const pair<int,int> loc8 (2,1);
 const pair<int,int> loc9 (2,2);
 
-
 const pair<int,int> locations[] = {loc1, loc2, loc3, loc4, loc5, loc6, loc7, loc8, loc9};
+
+
+
+// this should be more efficient as a list, 
+// i'm just too lazy to make an iterator,
+// and performance isn't an issue in ttt.
+//vector< pair<int,int> > locations (9);
 
 char gameState[9]; // gameState. 
 
@@ -77,13 +84,17 @@ public:
 	bool isEmptySide(int location);
 };
 
-SimpleTree::SimpleTree(int argSize)
+/*
+	argSize is the number of children.
+*/
+SimpleTree::SimpleTree(int argSize) // int[] children
 {
 	size = argSize;
 	selected[0] = 0;
 	selected[1] = 1;
 	selected[2] = 2;
 	children.reserve(argSize);
+	// @TODO - change to init to only the passed in chosen children so we can branch.
 
 	for(int i = 0; i < argSize; i++)
 	{
@@ -188,16 +199,20 @@ Move SimpleTree::getMove()
 */
 void SimpleTree::toStringChildren()
 {
+	cout << "Root:\n";
+	move.toString();
+
 	for(int i = 0; i < size; i++)
 		{
-			cout << "-------|";
-			cout << "Root:\n";
-			children[i]->toString();
-			cout << "Child: ";
+			cout << "Node: ";
 			cout << i << '\n';
-			children[i]->toStringChildren();			
+			children[i]->toString();			
 		}	
+
+	cout << "\n";
+		
 }
+
 
 void SimpleTree::toString()
 {
@@ -500,7 +515,7 @@ bool SimpleTree::isFork(int location)
  {
 	bool forkable = false;
 
-	if(location == 2 || location == 6 && isMine(0) && isMine(8) && (isEmptyCorner(2) || isEmptyCorner(6)) )
+	if(location == 2 || ( location == 6 && isMine(0) && isMine(8) && (isEmptyCorner(2) || isEmptyCorner(6)) ) )
 	{
 		forkable = true;
 	}
