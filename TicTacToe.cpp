@@ -25,6 +25,9 @@ TicTacToe::TicTacToe()
 	}
 }
 
+/*
+	Initialize the board.	
+*/
 void TicTacToe::init()
 {
 	turns = 0;
@@ -37,6 +40,9 @@ void TicTacToe::init()
 	}
 }
 
+/*
+	Mark the board with the passed move.	
+*/
 void TicTacToe::markBoard(Move* move)
 {
 	pair<int,int> loc = move->getLocation();
@@ -46,11 +52,18 @@ void TicTacToe::markBoard(Move* move)
 	turns++;
 }
 
+/* 
+	The game is done if the done variable is true or 
+	the max amount of turns have been exceeded.
+*/
 bool TicTacToe::isDone()
 {
 	return this->done || turns > 8;
 }
 
+/*
+	Prints the current state of the board.
+*/
 void TicTacToe::printBoard()
 {
 	for(int i = 0; i < 3; i++)
@@ -71,6 +84,9 @@ void TicTacToe::printBoard()
 	std::cout << '\n';
 }
 
+/*
+	Simple getter. Returns copy.
+*/
 char** TicTacToe::getBoard()
 {
 	char** returnBoard = new char*[3];

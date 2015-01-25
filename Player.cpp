@@ -1,6 +1,8 @@
 using namespace std;
 
-
+/*
+  A tictactoe player.
+*/ 
 class Player
 {
 public:
@@ -13,11 +15,17 @@ public:
 	SimpleTree* minimaxNode(SimpleTree* node, int depth, bool maximizingPlayer);
 };
 
+/*
+  Initializes a player with a marker.
+*/
 Player::Player(char c)
 {
 	marker = c;
 }
 
+/*
+  
+*/
 int Player::minimax(SimpleTree* node, int depth, bool maximizingPlayer)
 {
 

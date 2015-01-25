@@ -17,6 +17,7 @@ const pair<int,int> loc7 (2,0);
 const pair<int,int> loc8 (2,1);
 const pair<int,int> loc9 (2,2);
 
+
 const pair<int,int> locations[] = {loc1, loc2, loc3, loc4, loc5, loc6, loc7, loc8, loc9};
 
 char gameState[9]; // gameState. 
@@ -189,6 +190,7 @@ void SimpleTree::toStringChildren()
 {
 	for(int i = 0; i < size; i++)
 		{
+			cout << "-------|";
 			cout << "Root:\n";
 			children[i]->toString();
 			cout << "Child: ";
