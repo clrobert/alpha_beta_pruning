@@ -131,5 +131,6 @@ enumerate_all_games(root_node, turn)
 root_node.printself()
 import pdb; pdb.set_trace()
 
-# Need to give all nodes a value.
-# Need to implement turn taking for two players so a game can be produced.
+# Need to give leaf nodes a value.
+# Need to apply minimax to give the rest of the nodes a value
+# Need to implement turn taking for a human player and cpu or cpu x 2 so a game can be produced.
