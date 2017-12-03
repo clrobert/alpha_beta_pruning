@@ -1,5 +1,3 @@
-POSITIVE_INFINITY = 100
-NEGATIVE_INFINITY = -100
 
 
 def printable_value(value):
@@ -9,10 +7,6 @@ def printable_value(value):
         return " "
     if value == 1:
         return "X"
-
-
-def get_game_board():
-    return [0] * 9
 
 
 def get_display_board(board):
@@ -49,28 +43,85 @@ def get_other_player(player_value):
 
 
 def evaluate_move(player_value, board, location):
+    value = None
+
     new_board = list(board)
-    new_board[location] = player_value
+    if new_board[location] == 0:
+        new_board[location] = player_value
 
-    if has_player_won(player_value, board):
-        return POSITIVE_INFINITY
-    elif has_player_won(get_other_player(player_value), board):
-        return NEGATIVE_INFINITY
-    else:
-        return 0
+        if has_player_won(player_value, board):
+            value = WIN_VALUE
+        elif has_player_won(get_other_player(player_value), board):
+            value = LOSE_VALUE
+        else:
+            value = 0
+
+    return value
 
 
-def evaluate_board(player_value, board):
-    all_move_values = []
+def get_base_board():
+    return [0] * 9
 
+
+def build_node(board, turn):
+    return {
+        "current_board": list(board),
+        "next_nodes": None,
+        "value": None,
+        "turn": turn,
+    }
+
+
+def enumerate_all_choices(node, turn):
+    all_choices = list()
+
+    # Yes, iterate over the entire board. Optimize later.
     for i in range(0, 9):
-        all_move_values.append(evaluate_move(player_value, board, i))
+        new_node = build_node(node["current_board"], turn)
+        if new_node["current_board"][i] == 0:
+            new_node["current_board"][i] = PLAYERS[turn%2]
+            all_choices.append(new_node)
 
-    return all_move_values
+    return all_choices
 
 
-board = get_game_board()
-display_board = get_display_board(board)
+def enumerate_all_games(current_node, turn):
+    current_node['next_nodes'] = enumerate_all_choices(current_node, turn)
+    if current_node['next_nodes']:
+        for next_node in current_node['next_nodes']:
+            enumerate_all_games(next_node, turn + 1)
 
-print(display_board)
-print(evaluate_board(1, board))
+
+def evaluate_all_games(all_games):
+    for game in all_games:
+
+
+def minimax(node, maximizing_player):
+    if not node["next_nodes"]:
+        return node["value"]
+
+    if maximizing_player:
+        best_value = -1
+        for child_node in node["next_nodes"]:
+            value = minimax(child_node, False)
+            best_value = max(best_value, value)
+        return best_value
+    else:
+        best_value = 1
+        for child_node in node["next_nodes"]:
+            value = minimax(child_node, True)
+            best_value = min(best_value, value)
+        return best_value
+
+
+WIN_VALUE = 1
+LOSE_VALUE = -1
+PLAYERS = [1, -1]
+turn = 0
+
+root_node = build_node(get_base_board(), turn - 1)
+enumerate_all_games(root_node, turn)
+
+# Need to be able to traverse tree reasonably; probably need a node class.
+# Need to evaluate give all nodes a value.
+# Need to implement turn taking for two players so a game can be produced.
