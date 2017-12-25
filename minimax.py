@@ -48,7 +48,7 @@ def get_other_player(player_value):
 
 def evaluate_move(player_value, node):
     value = None
-    # import pdb; pdb.set_trace()
+    import pdb; pdb.set_trace()
 
     if has_player_won(player_value, node.current_board):
         value = WIN_VALUE
@@ -144,7 +144,7 @@ enumerate_all_games(root_node, turn)
 
 # test beta: FAILED
 print("\n-----test beta-----")
-beta = root_node.next_nodes[0].next_nodes[0].next_nodes[0].next_nodes[0].next_nodes[0]
+beta = root_node.next_nodes[0].next_nodes[0].next_nodes[0].next_nodes[0].next_nodes[0].next_nodes[0].next_nodes[0].next_nodes[0]
 current_board = beta.current_board
 print(get_display_board(current_board))
 import pdb; pdb.set_trace()

@@ -65,7 +65,7 @@ the values would be defined in a *value matrix*:
     8: 0
 }
 
-The minimax decision function should return 7.
+The minimax decision function should return location 7.
 
 ## Requirements, first goal
 
@@ -119,7 +119,7 @@ loop while game not over:
     print new game state.
 
 ## Optimizations
-- [ ] Function to prune all game states in which one of the players does not win.
+- [ ] Function to prune ties and end the game earlier.
 
 ## Stretch goals
 - [ ] Implementing multiple strategies.
