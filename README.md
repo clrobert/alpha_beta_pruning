@@ -46,11 +46,13 @@ give each location (choice) on the board a reward value for the player: either -
 Example:
 For X,
 
+```
 x| |
 -----
  |x|o
 -----
 o|x|o
+```
 
 the values would be defined in a *value matrix*:
 {
