@@ -55,6 +55,7 @@ o|x|o
 ```
 
 the values would be defined in a *value matrix*:
+```
 {
     0: None,
     1: None,
@@ -66,7 +67,7 @@ the values would be defined in a *value matrix*:
     7: +inf,
     8: 0
 }
-
+```
 The minimax decision function should return location 7.
 
 ## Requirements, first goal
