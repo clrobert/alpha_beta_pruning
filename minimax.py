@@ -126,5 +126,13 @@ turn = 0
 root_node = Node(get_base_board(), turn - 1)
 enumerate_all_games(root_node, turn)
 
-root_node.printself()
+# root_node.printself()
+yop = root_node.next_nodes[0].next_nodes[0].next_nodes[0].next_nodes[0].next_nodes[0].next_nodes[0]
+current_board = yop.current_board
+location = 1
+print(get_display_board(current_board))
+print(evaluate_move(1, current_board, location))
+
 import pdb; pdb.set_trace()
+
+location = 8

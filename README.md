@@ -52,7 +52,7 @@ x| |
 -----
 o|x|o
 
-the values would be defined in a *value dict*:
+the values would be defined in a *value matrix*:
 {
     0: None,
     1: None,
@@ -76,14 +76,15 @@ The minimax decision function should return 7.
 in: empty board
 out: all possible game states
 
+- [x] Function to evaluate a single move.
 - [ ] Function to evaluate a single game state.
 in: game state
-out: dictionary of possible moves with their values, or *value dict*
+out: dictionary of possible moves with their values, or *value matrix*
 
 - [ ] Function to evaluate all possible game states.
 in: all possible game states
 method: recursively evaluate all states from the end states.
-out: attach value dicts to each game state.
+out: attach value matrixs to each game state.
 
 - [ ] Ability to make a move
 in: reference to current game state
@@ -91,7 +92,7 @@ method: choose minimax value
 out: reference to new game state
 
 - [ ] Ability to choose minimax-ed move (minimax decision function)
-in: value dict
+in: value matrix
 out: index of choice
 
 Note: we don't need a function to find the current game state because it is updated with every move.
