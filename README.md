@@ -21,7 +21,6 @@ Let _regret_ be the measure of cost to the player.
 
 - Minimax: Choose the option where the worst possible _regret_ is the lowest.
 
-
 ## Info
 ### Definitions
 - -inf is a move that leads to immediate defeat.
@@ -39,7 +38,6 @@ These are the numbered locations on the board:
 -----
 {0}|{1}|{2}
 ```
-
 
 ### Simple case
 1. Given any _k-1_ game state, where _k_ is the last move in the game,
@@ -97,13 +95,7 @@ in: value dict
 out: index of choice
 
 Note: we don't need a function to find the current game state because it is updated with every move.
-A move is just moving the pointer of the current game state to the next game state.
-
-## Optimizations
-- [ ] Function to prune all impossible game states.
-- [ ] Function to prune all game states in which one of the players does not win.
-- [ ] Better definitions of minimax and maximin for one and two player games.
-- [ ] Implementing multiple strategies.
+A move is just moving the reference of the current game state to the next game state.
 
 ## Goals
 - [ ] Ability for a human to take a turn.
@@ -116,7 +108,7 @@ in: command args for human game
 in: command args for who goes first (human, ai) -- X always goes first.
 method:
 print initial game state.
-loop:
+loop while game not over:
     notification of human turn and symbol.
     wait for human input.
     process human move.
@@ -127,7 +119,17 @@ loop:
     print new game state.
 
 - [ ] Ability for two AI players to play games.
-loop:
+loop while game not over:
     notification of AI turn and symbol.
     process ai move.
     print new game state.
+
+## Optimizations
+- [ ] Function to prune all game states in which one of the players does not win.
+    - [ ] Human game.
+    - [ ] AI v. AI game - may now need two decision trees.
+
+## Stretch goals
+- [ ] Implementing multiple strategies.
+- [ ] Function to notify when a win is not possible -- only a tie or a loss.
+- [ ] Better definitions of minimax and maximin for one and two player games.

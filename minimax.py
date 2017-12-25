@@ -1,5 +1,3 @@
-
-
 def printable_value(value):
     if value == -1:
         return "O"

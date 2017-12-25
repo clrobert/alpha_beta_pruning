@@ -1,0 +1,2 @@
+run:
+	python minimax.py
