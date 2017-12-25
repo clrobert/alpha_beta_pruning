@@ -67,7 +67,7 @@ the values would be defined in a *value matrix*:
 
 The minimax decision function should return 7.
 
-## Requirements
+## Requirements, first goal
 
 - Method one: one tree.
 - ~Method two: two trees. one of game states, one of game values~
@@ -77,19 +77,24 @@ in: empty board
 out: all possible game states
 
 - [x] Function to evaluate a single move.
-- [ ] Function to evaluate a single game state.
+- [x] Function to evaluate a single game state.
 in: game state
 out: dictionary of possible moves with their values, or *value matrix*
 
 - [ ] Function to evaluate all possible game states.
 in: all possible game states
-method: recursively evaluate all states from the end states.
+method: recursively evaluate all previous value matrices from the end states.
 out: attach value matrixs to each game state.
 
-- [ ] Ability to make a move
+- [x] Ability for the ai to take a turn
 in: reference to current game state
 method: choose minimax value
 out: reference to new game state
+
+- [ ] Ability for a human to take a turn.
+print: game state
+in: index of move
+out: game state with move
 
 - [ ] Ability to choose minimax-ed move (minimax decision function)
 in: value matrix
@@ -97,12 +102,6 @@ out: index of choice
 
 Note: we don't need a function to find the current game state because it is updated with every move.
 A move is just moving the reference of the current game state to the next game state.
-
-## Goals
-- [ ] Ability for a human to take a turn.
-print: game state
-in: index of move
-out: game state with move
 
 - [ ] Ability for a human to play a game.
 in: command args for human game
@@ -119,18 +118,17 @@ loop while game not over:
     process ai move.
     print new game state.
 
-- [ ] Ability for two AI players to play games.
-loop while game not over:
-    notification of AI turn and symbol.
-    process ai move.
-    print new game state.
-
 ## Optimizations
 - [ ] Function to prune all game states in which one of the players does not win.
-    - [ ] Human game.
-    - [ ] AI v. AI game - may now need two decision trees.
 
 ## Stretch goals
 - [ ] Implementing multiple strategies.
 - [ ] Function to notify when a win is not possible -- only a tie or a loss.
 - [ ] Better definitions of minimax and maximin for one and two player games.
+
+## Stretch redesign
+- [ ] Ability for two AI players to play games.
+loop while game not over:
+    notification of AI turn and symbol.
+    process ai move.
+    print new game state.

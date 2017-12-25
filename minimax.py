@@ -16,6 +16,12 @@ def get_display_board(board):
         {0}|{1}|{2}
     """.format(*[printable_value(x) for x in board])
 
+def print_board(board):
+    print(get_display_board(board))
+
+# alias.
+def pb(board):
+    print_board(board)
 
 def has_player_won(player_value, board):
     winning_value = player_value * 3
@@ -40,21 +46,27 @@ def get_other_player(player_value):
         return 1
 
 
-def evaluate_move(player_value, board, location):
+def evaluate_move(player_value, node):
     value = None
+    # import pdb; pdb.set_trace()
 
-    new_board = list(board)
-    if new_board[location] == 0:
-        new_board[location] = player_value
-
-        if has_player_won(player_value, board):
-            value = WIN_VALUE
-        elif has_player_won(get_other_player(player_value), board):
-            value = LOSE_VALUE
-        else:
-            value = 0
-
+    if has_player_won(player_value, node.current_board):
+        value = WIN_VALUE
+    elif has_player_won(get_other_player(player_value), node.current_board):
+        value = LOSE_VALUE
+    elif 0 not in node.current_board: # tie
+        value = 0
+    else:
+        value = minimax(node, True)
     return value
+
+
+def evaluate_board(player_value, available_move_nodes):
+    value_matrix = []
+    for move in available_move_nodes:
+        move.value = evaluate_move(player_value, move)
+        value_matrix.append(move.value)
+    return value_matrix
 
 
 def get_base_board():
@@ -64,9 +76,13 @@ def get_base_board():
 class Node:
     def __init__(self, board, turn):
         self.current_board = list(board)
-        self.next_nodes = None
-        self.value = None
         self.turn = turn
+        self.value = None
+
+        # The value matrix is for evaluating
+        # next moves.
+        self.value_matrix = None
+        self.next_nodes = None
 
     def printself(self):
         print("Turn %s:" % self.turn)
@@ -126,13 +142,19 @@ turn = 0
 root_node = Node(get_base_board(), turn - 1)
 enumerate_all_games(root_node, turn)
 
-# root_node.printself()
-yop = root_node.next_nodes[0].next_nodes[0].next_nodes[0].next_nodes[0].next_nodes[0].next_nodes[0]
-current_board = yop.current_board
-location = 1
+# test beta: FAILED
+print("\n-----test beta-----")
+beta = root_node.next_nodes[0].next_nodes[0].next_nodes[0].next_nodes[0].next_nodes[0]
+current_board = beta.current_board
 print(get_display_board(current_board))
-print(evaluate_move(1, current_board, location))
-
 import pdb; pdb.set_trace()
+print(evaluate_board(-1, beta.next_nodes))
 
-location = 8
+"""
+# test alpha: PASSED
+print("\n-----test alpha-----")
+alpha = beta.next_nodes[0]
+current_board = alpha.current_board
+print(get_display_board(current_board))
+print(evaluate_board(1, alpha.next_nodes))
+"""
